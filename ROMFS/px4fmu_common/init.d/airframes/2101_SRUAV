@@ -1,0 +1,92 @@
+#!/bin/sh
+#
+# @name SRUAV
+#
+# @type VTOL Tailsitter
+# @class VTOL
+#
+# @maintainer Lee Su <isugkgkgk@gmail.com>
+#
+# @output Motor1 motor 1
+# @output Servo1 Right Aileron
+# @output Servo2 Left Aileron
+# @output Servo3 Upper Tail
+# @output Servo4 Right Tail
+# @output Servo5 Under Tail
+# @output Servo6 Left Tail
+#
+# @board px4_fmu-v2 exclude
+# @board bitcraze_crazyflie exclude
+# @board holybro_kakutef7 exclude
+#
+
+. ${R}etc/init.d/rc.vtol_defaults
+
+param set-default EKF2_FUSE_BETA 0 # side slip fusion is currently not supported for tailsitters
+
+param set-default CA_AIRFRAME 4 #Tailsitter VTOL
+param set-default CA_ROTOR_COUNT 1
+param set-default CA_ROTOR0_CT 34.5
+param set-default CA_ROTOR0_KM 0.019
+param set-default CA_SV_CS_COUNT 6
+param set-default CA_SV_CS_COUNT_H 4
+param set-default CA_SV_CS0_TYPE 4 #Rudder(12)
+param set-default CA_SV_CS0_TRQ_R 0.5000
+param set-default CA_SV_CS0_TRQ_Y 0.2500
+param set-default CA_SV_CS1_TYPE 1 #Left Aileron(9)
+param set-default CA_SV_CS1_TRQ_P 0.5000
+param set-default CA_SV_CS1_TRQ_Y 0.2500
+param set-default CA_SV_CS2_TYPE 12 #Custom(6)
+param set-default CA_SV_CS2_TRQ_R 0.5000
+param set-default CA_SV_CS2_TRQ_Y 0.2500
+param set-default CA_SV_CS3_TYPE 2 #Right Aileron(3)
+param set-default CA_SV_CS3_TRQ_P 0.5000
+param set-default CA_SV_CS3_TRQ_Y 0.2500
+param set-default CA_SV_CS4_TYPE 5 #Left Aileron
+param set-default CA_SV_CS4_TRQ_Y -0.5000
+param set-default CA_SV_CS5_TYPE 6 #Right Aileron
+param set-default CA_SV_CS5_TRQ_Y 0.5000
+
+
+param set-default PWM_MAIN_TIM0 400
+param set-default PWM_MAIN_TIM1 50
+param set-default PWM_MAIN_TIM2 50
+
+param set-default PWM_MAIN_FUNC1 101
+param set-default PWM_MAIN_FUNC3 205
+param set-default PWM_MAIN_FUNC4 206
+param set-default PWM_MAIN_FUNC5 202
+param set-default PWM_MAIN_FUNC6 204
+param set-default PWM_MAIN_FUNC7 203
+param set-default PWM_MAIN_FUNC8 201
+
+param set-default PWM_MAIN_DIS1 900
+param set-default PWM_MAIN_DIS2 1500
+param set-default PWM_MAIN_DIS3 1300
+param set-default PWM_MAIN_DIS4 1450
+param set-default PWM_MAIN_DIS5 1550
+param set-default PWM_MAIN_DIS6 1500
+param set-default PWM_MAIN_DIS7 1550
+param set-default PWM_MAIN_DIS8 1400
+
+param set-default PWM_MAIN_MAX3 1600
+param set-default PWM_MAIN_MAX4 1750
+param set-default PWM_MAIN_MAX5 1890
+param set-default PWM_MAIN_MAX6 1840
+param set-default PWM_MAIN_MAX7 1890
+param set-default PWM_MAIN_MAX8 1740
+
+parma set-default PWM_MAIN_MIN4 1150
+parma set-default PWM_MAIN_MIN5 1210
+parma set-default PWM_MAIN_MIN6 1160
+parma set-default PWM_MAIN_MIN7 1210
+parma set-default PWM_MAIN_MIN8 1060
+
+param set-default PWM_MAIN_REV 144
+
+param set-default MAV_TYPE 23
+param set-default VT_TYPE 0
+param set-default VT_ELEV_MC_LOCK 0
+param set-default CBRK_AIRSPD_CHK 162128
+param set-default SENS_BOARD_ROT 24
+param set-default VT_B_TRANS_DUR 5
