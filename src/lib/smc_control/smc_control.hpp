@@ -46,6 +46,12 @@ public:
 	}
 
 	/**
+	 * Get status message of controller for logging/debugging
+	 * @param rate_ctrl_status status message to fill with internal states
+	 */
+	void getRateControlStatus(rate_ctrl_status_s &rate_ctrl_status);
+
+	/**
 	 * Run saturation function for sliding mode control
 	 * @param s sliding surface
 	 * @return [-1,1] saturation output

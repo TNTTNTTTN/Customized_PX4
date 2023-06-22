@@ -42,7 +42,9 @@ px4_add_module(
 		mc_att_control_main.cpp
 		mc_att_control.hpp
 	DEPENDS
+		SMC_Control
 		AttitudeControl
 		mathlib
 		px4_work_queue
+		circuit_breaker
 	)

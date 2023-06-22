@@ -56,6 +56,18 @@
 #include <lib/mathlib/math/filter/AlphaFilter.hpp>
 
 #include <AttitudeControl.hpp>
+// Additional header Input to Control based on SMC module
+#include <lib/smc_control/smc_control.hpp>
+#include <uORB/PublicationMulti.hpp>
+#include <lib/systemlib/mavlink_log.h>
+#include <uORB/topics/actuator_controls_status.h>
+#include <uORB/topics/battery_status.h>
+#include <uORB/topics/control_allocator_status.h>
+#include <uORB/topics/rate_ctrl_status.h>
+#include <uORB/topics/vehicle_angular_velocity.h>
+#include <uORB/topics/vehicle_land_detected.h>
+#include <uORB/topics/vehicle_thrust_setpoint.h>
+#include <uORB/topics/vehicle_torque_setpoint.h>
 
 using namespace time_literals;
 
@@ -92,7 +104,10 @@ private:
 	 */
 	void generate_attitude_setpoint(const matrix::Quatf &q, float dt, bool reset_yaw_sp);
 
-	AttitudeControl _attitude_control; /**< class for attitude control calculations */
+	void updateActuatorControlsStatus(const vehicle_torque_setpoint_s &vehicle_torque_setpoint, float dt);
+
+	//AttitudeControl _attitude_control; /**< class for attitude control calculations */
+	SMC_control _attitude_control;
 
 	uORB::SubscriptionInterval _parameter_update_sub{ORB_ID(parameter_update), 1_s};
 
@@ -105,11 +120,24 @@ private:
 
 	uORB::SubscriptionCallbackWorkItem _vehicle_attitude_sub{this, ORB_ID(vehicle_attitude)};
 
+	// Additional Subscription due to SMC module
+	uORB::Subscription _vehicle_land_detected_sub{ORB_ID(vehicle_land_detected)};
+	uORB::Subscription _battery_status_sub{ORB_ID(battery_status)};
+
+	uORB::SubscriptionCallbackWorkItem _vehicle_angular_velocity_sub{this, ORB_ID(vehicle_angular_velocity)};
+
 	uORB::Publication<vehicle_rates_setpoint_s>     _vehicle_rates_setpoint_pub{ORB_ID(vehicle_rates_setpoint)};    /**< rate setpoint publication */
 	uORB::Publication<vehicle_attitude_setpoint_s>  _vehicle_attitude_setpoint_pub;
 
+	// Additional Publication due to SMC module
+	uORB::Publication<actuator_controls_status_s>	_actuator_controls_status_pub{ORB_ID(actuator_controls_status_0)};
+	uORB::PublicationMulti<rate_ctrl_status_s>	_controller_status_pub{ORB_ID(rate_ctrl_status)};
+	uORB::Publication<vehicle_torque_setpoint_s>	_vehicle_torque_setpoint_pub;
+	uORB::Publication<vehicle_thrust_setpoint_s>	_vehicle_thrust_setpoint_pub;
+
 	manual_control_setpoint_s       _manual_control_setpoint {};    /**< manual control setpoint */
 	vehicle_control_mode_s          _vehicle_control_mode {};       /**< vehicle control mode */
+	vehicle_status_s	_vehicle_status{};
 
 	perf_counter_t  _loop_perf;             /**< loop duration performance counter */
 
@@ -117,6 +145,9 @@ private:
 
 	float _man_yaw_sp{0.f};                 /**< current yaw setpoint in manual mode */
 	float _man_tilt_max;                    /**< maximum tilt allowed for manual flight [rad] */
+
+	bool _landed{true};
+	bool _maybe_landed{true};
 
 	AlphaFilter<float> _man_roll_input_filter;
 	AlphaFilter<float> _man_pitch_input_filter;
@@ -133,6 +164,11 @@ private:
 
 	uint8_t _quat_reset_counter{0};
 
+	float _battery_status_scale{0.0f};
+	matrix::Vector3f _rates_setpoint{};
+	float _energy_integration_time{0.0f};
+	float _control_energy[4] {};
+
 	DEFINE_PARAMETERS(
 		(ParamInt<px4::params::MC_AIRMODE>)         _param_mc_airmode,
 		(ParamFloat<px4::params::MC_MAN_TILT_TAU>)  _param_mc_man_tilt_tau,
@@ -146,13 +182,23 @@ private:
 		(ParamFloat<px4::params::MC_PITCHRATE_MAX>) _param_mc_pitchrate_max,
 		(ParamFloat<px4::params::MC_YAWRATE_MAX>)   _param_mc_yawrate_max,
 
+		(ParamFloat<px4::params::MC_ROLLRATE_P>) _param_mc_rollrate_p,
+		(ParamFloat<px4::params::MC_PITCHRATE_P>) _param_mc_pitchrate_p,
+		(ParamFloat<px4::params::MC_YAWRATE_P>) _param_mc_yawrate_p,
+
+		(ParamFloat<px4::params::MC_ROLLRATE_D>) _param_mc_rollrate_d,
+		(ParamFloat<px4::params::MC_PITCHRATE_D>) _param_mc_pitchrate_d,
+		(ParamFloat<px4::params::MC_YAWRATE_D>) _param_mc_yawrate_d,
+
 		/* Stabilized mode params */
 		(ParamFloat<px4::params::MPC_MAN_TILT_MAX>) _param_mpc_man_tilt_max,    /**< maximum tilt allowed for manual flight */
 		(ParamFloat<px4::params::MPC_MAN_Y_MAX>)    _param_mpc_man_y_max,       /**< scaling factor from stick to yaw rate */
 		(ParamFloat<px4::params::MPC_MANTHR_MIN>)   _param_mpc_manthr_min,      /**< minimum throttle for stabilized */
 		(ParamFloat<px4::params::MPC_THR_MAX>)      _param_mpc_thr_max,         /**< maximum throttle for stabilized */
 		(ParamFloat<px4::params::MPC_THR_HOVER>)    _param_mpc_thr_hover,       /**< throttle at stationary hover */
-		(ParamInt<px4::params::MPC_THR_CURVE>)      _param_mpc_thr_curve        /**< throttle curve behavior */
+		(ParamInt<px4::params::MPC_THR_CURVE>)      _param_mpc_thr_curve,       /**< throttle curve behavior */
+
+		(ParamBool<px4::params::MC_BAT_SCALE_EN>) _param_mc_bat_scale_en
 	)
 };
 

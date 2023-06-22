@@ -10,8 +10,21 @@ using namespace matrix;
 
 void SMC_control::setGains(const matrix::Vector3f &lambda, const matrix::Vector3f &K)
 {
-	_gain_lambda = lambda;
+	_gain_lambda = -lambda;
 	_gain_K = K;
+
+	// Set Moment of Inertia
+	_moi(0,0) = 1; // Ixx
+	_moi(0,1) = 0; // Ixy
+	_moi(0,2) = 0; // Ixz
+
+	_moi(1,0) = 0; // Ixy
+	_moi(1,1) = 1; // Iyy
+	_moi(1,2) = 0; // Iyz
+
+	_moi(2,0) = 0; // Ixz
+	_moi(2,1) = 0; // Iyz
+	_moi(2,2) = 1; // Izz
 }
 
 matrix::Vector3f SMC_control::saturation(const matrix::Vector3f &s)
@@ -57,8 +70,15 @@ matrix::Vector3f SMC_control::update(const matrix::Quatf q, const matrix::Vector
 	const Quatf eq_dot = -.5f * (Quatf(0 ,rate(0), rate(1), rate(2)) * eq);
 	const Vector3f L = (eq.imag().cross(_moi*rate)+_moi*eq_dot.imag()).emult(_gain_lambda);
 	// Set sliding surface
-	const Vector3f s = rate-qe.imag().emult(_gain_lambda);
+	const Vector3f s = rate+qe.imag().emult(_gain_lambda);
+
 	Vector3f torque = -L-saturation(s).emult(_gain_K);
 	return torque;
 }
 
+void SMC_control::getRateControlStatus(rate_ctrl_status_s &rate_ctrl_status)
+{
+	rate_ctrl_status.rollspeed_integ = 0;
+	rate_ctrl_status.pitchspeed_integ = 0;
+	rate_ctrl_status.yawspeed_integ = 0;
+}
