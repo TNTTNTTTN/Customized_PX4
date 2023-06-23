@@ -20,8 +20,9 @@ public:
 	 * Set parameter for Sliding mode control
 	 * @param lambda 3x1 vector : Sliding surface convergence
 	 * @param K 3x1 vector : Sliding surface gain
+	 * @param yaw_weight A fraction [0,1] deprioritizing yaw compared to roll and pitch
 	*/
-	void setGains(const matrix::Vector3f &lambda, const matrix::Vector3f &K);
+	void setGains(const matrix::Vector3f &lambda, const matrix::Vector3f &K,  const float yaw_weight);
 
 	/**
 	 * Set a new attitude setpoint replacing the one tracked before
@@ -60,6 +61,13 @@ public:
 	matrix::Vector3f saturation(const matrix::Vector3f &s);
 
 	/**
+	 * Run Signum function for sliding mode control
+	 * @param s sliding surface
+	 * @return [-1, 1] signum output
+	*/
+	matrix::Vector3f signum(const matrix::Vector3f &s);
+
+	/**
 	 * Run one control loop cycle calculation
 	 * @param q estimation of the current vehicle attitude unit quaternion
 	 * @param rate estimation of the current vehicle angular rate
@@ -68,10 +76,11 @@ public:
 	 */
 	matrix::Vector3f update(const matrix::Quatf q, const matrix::Vector3f &rate, const bool landed);
 
-
 private:
 	matrix::Vector3f _gain_lambda;
 	matrix::Vector3f _gain_K;
 	matrix::Matrix<float, 3,3> _moi;
+	float _yaw_w{0.f};
+
 	matrix::Quatf _attitude_setpoint_q; ///< latest known attitude setpoint e.g. from position control
 };
