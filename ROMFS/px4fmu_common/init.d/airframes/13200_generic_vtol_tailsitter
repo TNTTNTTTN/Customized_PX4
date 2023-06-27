@@ -20,24 +20,37 @@
 . ${R}etc/init.d/rc.vtol_defaults
 
 param set-default MAV_TYPE 19
-
+param set-default SYS_CTRL_ALLOC 1
 param set-default VT_ELEV_MC_LOCK 0
-param set-default VT_MOT_COUNT 2
+param set-default VT_MOT_COUNT 1
 param set-default VT_TYPE 0
+param set-default SENS_BOARD_ROT 24
 
 param set-default CA_AIRFRAME 4
-param set-default CA_ROTOR_COUNT 2
-param set-default CA_ROTOR0_KM -0.05
-param set-default CA_ROTOR0_PY 0.2
-param set-default CA_ROTOR1_KM -0.05
-param set-default CA_ROTOR1_PY -0.2
-param set-default CA_SV_CS_COUNT 2
-param set-default CA_SV_CS0_TRQ_P 0.5
-param set-default CA_SV_CS0_TRQ_Y 0.5
-param set-default CA_SV_CS0_TYPE 5
-param set-default CA_SV_CS1_TRQ_P 0.5
-param set-default CA_SV_CS1_TRQ_Y -0.5
-param set-default CA_SV_CS1_TYPE 6
+param set-default CA_ROTOR_COUNT 1
+param set-default CA_ROTOR0_CT 34.5
+param set-default CA_ROTOR0_KM 0.019
+param set-default CA_SV_CS_COUNT 6
+param set-default CA_SV_CS0_TYPE 1 # L aileron
+param set-default CA_SV_CS0_TRQ_Y 0.2
+param set-default CA_SV_CS1_TYPE 2 # R aileron
+param set-default CA_SV_CS1_TRQ_Y -0.2
+param set-default CA_SV_CS2_TYPE 7 # L Vtail
+param set-default CA_SV_CS2_TRQ_R 0.5
+param set-default CA_SV_CS2_TRQ_P 0.5
+param set-default CA_SV_CS2_TRQ_Y 0.25
+param set-default CA_SV_CS3_TYPE 8 # R Vtail
+param set-default CA_SV_CS3_TRQ_R 0.5
+param set-default CA_SV_CS3_TRQ_P -0.5
+param set-default CA_SV_CS3_TRQ_Y 0.25
+param set-default CA_SV_CS4 TYPE 3 # L Atail (Elevator)
+param set-default CA_SV_CS4 TRQ_R -0.5
+param set-default CA_SV_CS4 TRQ_P 0.5
+param set-default CA_SV_CS4 TRQ_Y 0.25
+param set-default CA_SV_CS5 TYPE 4 # R Atail (Ruddur)
+param set-default CA_SV_CS5 TRQ_R -0.5
+param set-default CA_SV_CS5 TRQ_P -0.5
+param set-default CA_SV_CS5_TRQ_Y 0.25
 
 set MIXER vtol_tailsitter_duo
 
