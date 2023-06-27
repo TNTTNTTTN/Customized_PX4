@@ -44,4 +44,6 @@ px4_add_module(
 		ecl_yaw_controller.cpp
 	DEPENDS
 		px4_work_queue
+		RateControl
+		SlewRate
 	)

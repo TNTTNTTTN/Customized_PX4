@@ -32,7 +32,7 @@
  ****************************************************************************/
 
 /**
- * @file RateControl.hpp
+ * @file rate_control.hpp
  *
  * PID 3 axis angular rate / angular velocity control.
  */
@@ -41,7 +41,7 @@
 
 #include <matrix/matrix/math.hpp>
 
-#include <lib/mixer/MultirotorMixer/MultirotorMixer.hpp>
+#include <mathlib/mathlib.h>
 #include <uORB/topics/rate_ctrl_status.h>
 
 class RateControl
