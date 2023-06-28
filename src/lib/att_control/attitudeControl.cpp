@@ -35,7 +35,7 @@
  * @file AttitudeControl.cpp
  */
 
-#include <AttitudeControl.hpp>
+#include <attitudeControl.hpp>
 
 #include <mathlib/math/Functions.hpp>
 

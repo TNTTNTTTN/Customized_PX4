@@ -32,6 +32,7 @@
 ############################################################################
 
 add_subdirectory(airspeed)
+add_subdirectory(att_control)
 add_subdirectory(avoidance)
 add_subdirectory(battery)
 add_subdirectory(bezier)

@@ -32,7 +32,7 @@
  ****************************************************************************/
 
 #include <gtest/gtest.h>
-#include <AttitudeControl.hpp>
+#include <attitudeControl.hpp>
 #include <mathlib/math/Functions.hpp>
 
 using namespace matrix;

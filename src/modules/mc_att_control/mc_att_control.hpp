@@ -57,7 +57,7 @@
 #include <vtol_att_control/vtol_type.h>
 #include <lib/mathlib/math/filter/AlphaFilter.hpp>
 
-#include <AttitudeControl.hpp>
+#include <lib/att_control/attitudeControl.hpp>
 
 using namespace time_literals;
 
