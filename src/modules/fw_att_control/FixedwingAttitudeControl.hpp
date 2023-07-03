@@ -32,6 +32,7 @@
  ****************************************************************************/
 #pragma once
 
+#include <lib/att_control/attitudeControl.hpp>
 #include <lib/rate_control/rate_control.hpp>
 #include <drivers/drv_hrt.h>
 #include "ecl_pitch_controller.h"
@@ -229,11 +230,12 @@ private:
 		(ParamFloat<px4::params::TRIM_YAW>) _param_trim_yaw
 	)
 
-	ECL_RollController		_roll_ctrl;
+	AttitudeControl 		_att_ctrl;
+	//ECL_RollController		_roll_ctrl;
 	ECL_PitchController		_pitch_ctrl;
 	ECL_YawController		_yaw_ctrl;
 	ECL_WheelController		_wheel_ctrl;
-	RateControl _rate_control;
+	RateControl 			_rate_control;
 
 	void control_flaps(const float dt);
 
