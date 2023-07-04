@@ -351,10 +351,11 @@ void FixedwingAttitudeControl::Run()
 			float helper = rollspeed;
 			rollspeed = -yawspeed;
 			yawspeed = helper;
+
+
 		}
-
 		const matrix::Eulerf euler_angles(R);
-
+		const matrix::Quatf modified(R);
 		vehicle_attitude_setpoint_poll();
 
 		// vehicle status update must be before the vehicle_control_mode_poll(), otherwise rate sp are not published during whole transition
@@ -496,7 +497,7 @@ void FixedwingAttitudeControl::Run()
 			if (_vcontrol_mode.flag_control_attitude_enabled) {
 				if (PX4_ISFINITE(_att_sp.roll_body) && PX4_ISFINITE(_att_sp.pitch_body)) {
 					_att_ctrl.setAttitudeSetpoint(Quatf(_att_sp.q_d), 1.0f);
-					Vector3f temp = _att_ctrl.update(Quatf(att.q));
+					Vector3f temp = _att_ctrl.update(modified);
 
 					if (wheel_control) {
 						_wheel_ctrl.control_attitude(dt, control_input);
@@ -584,7 +585,8 @@ void FixedwingAttitudeControl::Run()
 				 * Lazily publish the rate setpoint (for analysis, the actuators are published below)
 				 * only once available
 				 */
-				Vector3f temp = _att_ctrl.update(Quatf(_att_sp.q_d));
+				_att_ctrl.setAttitudeSetpoint(Quatf(_att_sp.q_d), 1.0f);
+				Vector3f temp = _att_ctrl.update(modified);
 				_rates_sp.roll = temp(0);
 				_rates_sp.pitch = temp(1);
 				_rates_sp.yaw = _yaw_ctrl.get_desired_bodyrate();
