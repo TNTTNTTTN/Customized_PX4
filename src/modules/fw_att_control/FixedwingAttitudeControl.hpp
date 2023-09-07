@@ -30,10 +30,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  ****************************************************************************/
-#pragma once
 
-#include <lib/att_control/attitudeControl.hpp>
-#include <lib/rate_control/rate_control.hpp>
 #include <drivers/drv_hrt.h>
 #include "ecl_pitch_controller.h"
 #include "ecl_roll_controller.h"
@@ -64,7 +61,6 @@
 #include <uORB/topics/parameter_update.h>
 #include <uORB/topics/rate_ctrl_status.h>
 #include <uORB/topics/vehicle_angular_velocity.h>
-#include <uORB/topics/vehicle_angular_acceleration.h>
 #include <uORB/topics/vehicle_attitude.h>
 #include <uORB/topics/vehicle_attitude_setpoint.h>
 #include <uORB/topics/vehicle_control_mode.h>
@@ -120,7 +116,6 @@ private:
 	uORB::Subscription _vehicle_land_detected_sub{ORB_ID(vehicle_land_detected)};	/**< vehicle land detected subscription */
 	uORB::Subscription _vehicle_status_sub{ORB_ID(vehicle_status)};			/**< vehicle status subscription */
 	uORB::Subscription _vehicle_rates_sub{ORB_ID(vehicle_angular_velocity)};
-	uORB::Subscription _vehicle_angular_acceleration_sub{ORB_ID(vehicle_angular_acceleration)};
 
 	uORB::SubscriptionData<airspeed_validated_s> _airspeed_validated_sub{ORB_ID(airspeed_validated)};
 
@@ -230,12 +225,10 @@ private:
 		(ParamFloat<px4::params::TRIM_YAW>) _param_trim_yaw
 	)
 
-	AttitudeControl 		_att_ctrl;
-	//ECL_RollController		_roll_ctrl;
+	ECL_RollController		_roll_ctrl;
 	ECL_PitchController		_pitch_ctrl;
 	ECL_YawController		_yaw_ctrl;
 	ECL_WheelController		_wheel_ctrl;
-	RateControl 			_rate_control;
 
 	void control_flaps(const float dt);
 

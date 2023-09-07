@@ -423,13 +423,13 @@ mixer:
               - { 'hidden': True, 'default': 0.0 } # pitch
               - { 'hidden': True, 'default': 0.0 } # yaw
             3: # Elevator
-              - { 'min': -1.0, 'max': 1.0, 'default': 0.5 } # roll
-              - { 'min': -1.0, 'max': 1.0, 'default': 0.5 } # pitch
-              - { 'min': -1.0, 'max': 1.0, 'default': 0.5 } # yaw
+              - { 'hidden': True, 'default': 0.0 } # roll
+              - { 'min': 0.0, 'max': 1.0, 'default': 1.0 } # pitch
+              - { 'hidden': True, 'default': 0.0 } # yaw
             4: # Rudder
-              - { 'min': -1.0, 'max': 1.0, 'default': 0.5 } # roll
-              - { 'min': -1.0, 'max': 1.0, 'default': 0.5 } # pitch
-              - { 'min': -1.0, 'max': 1.0, 'default': 0.5 } # yaw
+              - { 'hidden': True, 'default': 0.0 } # roll
+              - { 'hidden': True, 'default': 0.0 } # pitch
+              - { 'min': 0.0, 'max': 1.0, 'default': 1.0 } # yaw
             5: # Left Elevon
               - { 'min': -1.0, 'max': 0.0, 'default': -0.5 } # roll
               - { 'min': 0.0, 'max': 1.0, 'default': 0.5 } # pitch
@@ -439,13 +439,13 @@ mixer:
               - { 'min': 0.0, 'max': 1.0, 'default': 0.5 } # pitch
               - { 'hidden': True, 'default': 0.0 } # yaw
             7: # Left V Tail
-              - { 'min': -1.0, 'max': 1.0, 'default': 0.5 } # roll
-              - { 'min': -1.0, 'max': 1.0, 'default': 0.5 } # pitch
-              - { 'min': -1.0, 'max': 1.0, 'default': 0.5 } # yaw
+              - { 'hidden': True, 'default': 0.0 } # roll
+              - { 'min': 0.0, 'max': 1.0, 'default': 0.5 } # pitch
+              - { 'min': 0.0, 'max': 1.0, 'default': 0.5 } # yaw
             8: # Right V Tail
-              - { 'min': -1.0, 'max': 1.0, 'default': 0.5 } # roll
-              - { 'min': -1.0, 'max': 1.0, 'default': 0.5 } # pitch
-              - { 'min': -1.0, 'max': 1.0, 'default': -0.5 } # yaw
+              - { 'hidden': True, 'default': 0.0 } # roll
+              - { 'min': 0.0, 'max': 1.0, 'default': 0.5 } # pitch
+              - { 'min': -1.0, 'max': 0.0, 'default': -0.5 } # yaw
 
       - select_identifier: 'servo-type-tailsitter' # restrict torque based on servo type for tailsitters
         apply_identifiers: ['servo-torque-roll-tailsitter', 'servo-torque-pitch-tailsitter', 'servo-torque-yaw-tailsitter']

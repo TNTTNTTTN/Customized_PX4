@@ -32,7 +32,6 @@
 ############################################################################
 
 add_subdirectory(airspeed)
-add_subdirectory(att_control)
 add_subdirectory(avoidance)
 add_subdirectory(battery)
 add_subdirectory(bezier)
@@ -61,7 +60,6 @@ add_subdirectory(perf)
 add_subdirectory(pid)
 add_subdirectory(pid_design)
 add_subdirectory(pwm)
-add_subdirectory(rate_control)
 add_subdirectory(rc)
 add_subdirectory(sensor_calibration)
 add_subdirectory(slew_rate)

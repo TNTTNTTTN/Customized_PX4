@@ -319,7 +319,7 @@ MulticopterAttitudeControl::Run()
 			if (_v_control_mode.flag_control_manual_enabled &&
 			    !_v_control_mode.flag_control_altitude_enabled &&
 			    !_v_control_mode.flag_control_velocity_enabled &&
-			    !_v_control_mode.flag_control_position_enabled) {
+			    !_v_control_mode.flag_control_position_enabled && !is_tailsitter_transition) {
 
 				generate_attitude_setpoint(q, dt, _reset_yaw_sp);
 				attitude_setpoint_generated = true;

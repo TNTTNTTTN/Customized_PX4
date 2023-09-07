@@ -342,7 +342,7 @@ void VehicleMagnetometer::UpdatePowerCompensation()
 
 			if (_actuator_controls_0_sub.update(&controls)) {
 				for (auto &cal : _calibration) {
-					cal.UpdatePower(controls.control[actuator_controls_s::INDEX_THROTTLE]*controls.control[actuator_controls_s::INDEX_THROTTLE]);
+					cal.UpdatePower(controls.control[actuator_controls_s::INDEX_THROTTLE]);
 				}
 			}
 

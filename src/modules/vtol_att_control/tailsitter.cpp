@@ -245,11 +245,12 @@ void Tailsitter::update_transition_state()
 
 	if (_vtol_schedule.flight_mode == vtol_mode::TRANSITION_FRONT_P1) {
 
-		const float trans_pitch_rate = M_PI_2_F / _params->front_trans_duration;
+		// const float trans_pitch_rate = M_PI_2_F / _params->front_trans_duration;
 
 		if (tilt < M_PI_2_F - _params_tailsitter.fw_pitch_sp_offset) {
-			_q_trans_sp = Quatf(AxisAnglef(_trans_rot_axis,
-						       time_since_trans_start * trans_pitch_rate)) * _q_trans_start;
+			// _q_trans_sp = Quatf(AxisAnglef(_trans_rot_axis,
+			// 				time_since_trans_start * trans_pitch_rate)) * _q_trans_start;
+			_q_trans_sp = _q_trans_start * Quatf(0.707f, 0.0f, -0.707f, 0.0f);
 		}
 
 		// check front transition timeout
@@ -376,9 +377,9 @@ void Tailsitter::fill_actuator_outputs()
 		fw_out[actuator_controls_s::INDEX_PITCH] = 0;
 
 	} else {
+		fw_out[actuator_controls_s::INDEX_YAW]   = fw_in[actuator_controls_s::INDEX_YAW];
 		fw_out[actuator_controls_s::INDEX_ROLL]  = fw_in[actuator_controls_s::INDEX_ROLL];
 		fw_out[actuator_controls_s::INDEX_PITCH] = fw_in[actuator_controls_s::INDEX_PITCH];
-		fw_out[actuator_controls_s::INDEX_YAW] = fw_in[actuator_controls_s::INDEX_YAW];
 		_torque_setpoint_1->xyz[0] = fw_in[actuator_controls_s::INDEX_YAW];
 		_torque_setpoint_1->xyz[1] = fw_in[actuator_controls_s::INDEX_PITCH];
 		_torque_setpoint_1->xyz[2] = -fw_in[actuator_controls_s::INDEX_ROLL];

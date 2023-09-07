@@ -33,7 +33,7 @@
 
 #pragma once
 
-#include <lib/rate_control/rate_control.hpp>
+#include <RateControl.hpp>
 
 #include <lib/matrix/matrix/math.hpp>
 #include <lib/perf/perf_counter.h>
